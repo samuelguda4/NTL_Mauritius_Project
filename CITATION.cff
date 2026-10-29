@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite it as below."
+type: software
+title: "Night-time lights: eight use cases \u2014 Mauritius \u2014 statistics & public policy, public dashboard and AI agent"
+authors:
+  - name: "African Development Bank"
+  - name: "Data Innovation for Africa (DI4A)"
+version: "2.1.0"
+date-released: 2026-10-29
+url: "https://samuelguda4.github.io/NTL_Mauritius_Project/"
+repository-code: "https://github.com/samuelguda4/NTL_Mauritius_Project"
+license: MIT
+abstract: "Reproducible pipeline using night-time lights (VIIRS, Black Marble, DMSP) for eight statistical and public-policy use cases, a bilingual public dashboard and a grounded AI agent."
+keywords:
+  - "night-time lights"
+  - "VIIRS"
+  - "remote sensing"
+  - "economic statistics"
+  - "nowcasting"
+  - "Google Earth Engine"
+  - "big data"
+  - "official statistics"
+  - "Africa"
+  - "MUS"

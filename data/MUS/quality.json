@@ -1,0 +1,330 @@
+{
+ "version": "2.1.0",
+ "generated": "2026-10-29T12:21:45",
+ "country": "Mauritius",
+ "period": [
+  2014,
+  2025
+ ],
+ "lang": "en",
+ "statement": "Night-time-light indicators are experimental statistics: they complement official statistics and do not replace them. Every output is published with its method, validation, uncertainty, limitations and a confidence level.",
+ "use_cases": [
+  {
+   "uc": 1,
+   "page": "time",
+   "title": "Time dynamics",
+   "question": "Is activity accelerating or slowing down, net of seasonality?",
+   "sources": [
+    "VIIRS VCMSLCFG (monthly)",
+    "VIIRS VNL V2 (annual)",
+    "Harmonised DMSP–VIIRS (Li et al., 2020)"
+   ],
+   "method": "Robust STL (period 12) on log(sum of lights); Theil–Sen slope and Mann–Kendall test on annual composites; anomaly and break detection.",
+   "validation": {
+    "text": "Trend significance (Mann–Kendall) and monthly/annual consistency",
+    "metric": "p-value",
+    "value": "< 0.0001"
+   },
+   "uncertainty": "95% CI of annual growth: +4.7% to +7.9%",
+   "limits": "Cloud cover and short summer nights; light is not value added.",
+   "status": "experimental",
+   "confidence": "high",
+   "confidence_reason": "significant trend (p < 0.01; n = 12)"
+  },
+  {
+   "uc": 2,
+   "page": "regions",
+   "title": "Regional growth and convergence",
+   "question": "Which regions take off, which fall behind?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL / WorldPop",
+    "Sentinel-5P NO₂"
+   ],
+   "method": "Robust growth per unit (Theil–Sen, Mann–Kendall), growth/stagnation/decline classes, β- and σ-convergence, Herfindahl index.",
+   "validation": {
+    "text": "Rank correlation with tropospheric NO₂ (independent source)",
+    "metric": "Spearman ρ",
+    "value": "0.66"
+   },
+   "uncertainty": "Class assigned only if |slope| ≥ threshold and p < α; CI of β (robust errors).",
+   "limits": "Small units: noise and light blooming between neighbours.",
+   "status": "experimental",
+   "confidence": "medium",
+   "confidence_reason": "classification of 12 units, threshold ±1%/yr and p < 0.10"
+  },
+  {
+   "uc": 3,
+   "page": "time",
+   "title": "Light–GDP relationship",
+   "question": "Can growth be estimated before its release, and regional GDP?",
+   "sources": [
+    "VIIRS",
+    "Real GDP (World Bank, WDI)"
+   ],
+   "method": "log(light) ~ log(GDP) in levels and growth, OLS with HAC errors; out-of-sample nowcast; regional GDP = national GDP allocated pro rata of light.",
+   "validation": {
+    "text": "Out-of-sample tracking of official growth",
+    "metric": "correlation / MAE (pp)",
+    "value": "-0.16 / 4.0"
+   },
+   "uncertainty": "95% CI of the elasticity: 1.24 to 3.18; 80% and 95% prediction intervals.",
+   "limits": "Short annual sample; regional GDP is an experimental statistic to be checked against regional accounts.",
+   "status": "experimental",
+   "confidence": "medium",
+   "confidence_reason": "n = 12, significant but wide CI (1.94)"
+  },
+  {
+   "uc": 4,
+   "page": "shocks",
+   "title": "Shocks and resilience",
+   "question": "How deep was a shock, and how fast the recovery?",
+   "sources": [
+    "VIIRS (monthly)",
+    "Black Marble VNP46A2 (daily)",
+    "event catalogue"
+   ],
+   "method": "Gap to the pre-shock level on the seasonally adjusted series; structural breaks; daily Black Marble index.",
+   "validation": {
+    "text": "Does the trough exceed ordinary variability?",
+    "metric": "trough (main shock)",
+    "value": "-1.7% — no"
+   },
+   "uncertainty": "Pre-shock month-to-month variability (robust SD); unexplained breaks flagged.",
+   "limits": "Shocks hitting poorly lit activities (agriculture, daytime services) are underestimated.",
+   "status": "experimental",
+   "confidence": "low",
+   "confidence_reason": "trough compared with pre-shock month-to-month variability"
+  },
+  {
+   "uc": 5,
+   "page": "inequality",
+   "title": "Inequality and electrification",
+   "question": "Where do people without electricity live?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL / WorldPop",
+    "GHSL SMOD",
+    "electricity access (WDI)"
+   ],
+   "method": "Population-weighted Gini and Theil; population of inhabited pixels below the detection threshold; sensitivity to three thresholds; bootstrap CI of the Gini change.",
+   "validation": {
+    "text": "Gap with the World Bank electricity-access rate",
+    "metric": "mean gap (pp)",
+    "value": "-6.4"
+   },
+   "uncertainty": "Range across radiance thresholds; bootstrap CI of the Gini.",
+   "limits": "Proxy of outdoor lighting, not of connection: a connected but dimly lit household looks “in the dark”.",
+   "status": "experimental",
+   "confidence": "medium",
+   "confidence_reason": "sensitive to the radiance threshold (from 0.00 to 0.00 M depending on the threshold); a proxy for outdoor lighting, not for grid connection"
+  },
+  {
+   "uc": 6,
+   "page": "industry",
+   "title": "Industrial zones",
+   "question": "Where is industry, and is its activity growing?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL BUILT-S",
+    "Sentinel-5P NO₂/SO₂",
+    "MODIS MOD11A2",
+    "OpenStreetMap"
+   ],
+   "method": "Concordance of six signals per pixel (≥ 3 including light), 8-connected clusters, typology and confidence.",
+   "validation": {
+    "text": "Comparison with the reference list (n/a)",
+    "metric": "precision / recall / F1",
+    "value": "not available"
+   },
+   "uncertainty": "Per-cluster confidence from the number of strong signals; isolated sites to verify.",
+   "limits": "Sentinel-5P (≈ 5 km) and MODIS (1 km) resolution: signals describe a neighbourhood.",
+   "status": "experimental",
+   "confidence": "low",
+   "confidence_reason": "no reference list available to validate the detection"
+  },
+  {
+   "uc": 7,
+   "page": "tourism",
+   "title": "Seasonal tourism",
+   "question": "Which areas live from tourism, and how does the season evolve?",
+   "sources": [
+    "VIIRS (monthly)",
+    "hotel nights or WDI arrivals"
+   ],
+   "method": "Summer excess net of comparable units at the same latitude; one-sided test; season index base 100; seasons overlapping Ramadan flagged.",
+   "validation": {
+    "text": "Correlation with hotel nights",
+    "metric": "r",
+    "value": "not available"
+   },
+   "uncertainty": "p-value per unit; 2020–2021 excluded from the classification.",
+   "limits": "Any summer activity (diaspora, second homes, festivals) is captured, not only tourism.",
+   "status": "experimental",
+   "confidence": "low",
+   "confidence_reason": "no hotel-night statistics to validate the indicator"
+  },
+  {
+   "uc": 8,
+   "page": "urban",
+   "title": "Urbanisation signals",
+   "question": "Where do cities spread, where do villages get electrified, and where does population grow without light?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL GHS-POP / WorldPop",
+    "GHSL GHS-BUILT-S R2023A",
+    "urban population (WDI)"
+   ],
+   "method": "Lit area (pixels above the threshold) and population per unit; Theil–Sen growth rates; newly lit pixels (dark two years in a row at the start, lit two years in a row at the end), split between electrification of inhabited areas and new settlements; light/population typology.",
+   "validation": {
+    "text": "Rank correlation with GHSL built-up area growth (independent source)",
+    "metric": "Spearman ρ",
+    "value": "0.39"
+   },
+   "uncertainty": "Persistence required over two years to limit noise; ± 1 pp margin between growth rates before classifying.",
+   "limits": "Light measures outdoor lighting, not urbanisation in the administrative sense; blooming widens cities; GHSL population is interpolated between epochs.",
+   "status": "experimental",
+   "confidence": "low",
+   "confidence_reason": "rank correlation of 0.39 with GHSL built-up growth (11 units)"
+  }
+ ],
+ "dqaf": [
+  {
+   "dimension": "0. Prerequisites of quality",
+   "practice": "Institutional environment, resources, relevance",
+   "evidence": "African Development Bank × Data Innovation for Africa (DI4A) project; free satellite data; explicit policy question for each use case."
+  },
+  {
+   "dimension": "1. Assurances of integrity",
+   "practice": "Professionalism, transparency, ethical standards",
+   "evidence": "Open code, documented methods, parameters and versions recorded in the manifest; no individual data; publication without manual intervention on figures."
+  },
+  {
+   "dimension": "2. Methodological soundness",
+   "practice": "Concepts, scope, classification, basis for recording",
+   "evidence": "Methods published in the literature (Henderson et al. 2012; Elvidge et al. 2021; Román et al. 2018); ISO 3166 codes; geoBoundaries; WGS 84."
+  },
+  {
+   "dimension": "3. Accuracy and reliability",
+   "practice": "Source data, assessment, statistical techniques, validation, revisions",
+   "evidence": "Quality control (cloud cover, gas flares, outliers); validation of every use case against an independent source; confidence intervals; published confidence level."
+  },
+  {
+   "dimension": "4. Serviceability",
+   "practice": "Periodicity, timeliness, consistency, revision policy",
+   "evidence": "Monthly series available a few weeks after the month; full recomputation at each run (time-stamped cache); monthly/annual consistency checked."
+  },
+  {
+   "dimension": "5. Accessibility",
+   "practice": "Data, metadata, assistance to users",
+   "evidence": "Public bilingual dashboard, open files (CSV, JSON, GeoJSON), metadata manifest, AI agent citing its sources, GitHub repository with citation."
+  }
+ ],
+ "gsbpm": [
+  {
+   "phase": "1. Specify needs",
+   "notebook_sections": "1",
+   "what": "Policy questions of the eight use cases"
+  },
+  {
+   "phase": "2. Design",
+   "notebook_sections": "1–2",
+   "what": "Choice of sources, indicators and thresholds"
+  },
+  {
+   "phase": "3. Build",
+   "notebook_sections": "2",
+   "what": "ISO3-driven pipeline, embedded code, tests on a synthetic dataset"
+  },
+  {
+   "phase": "4. Collect",
+   "notebook_sections": "3",
+   "what": "Earth Engine, World Bank, OpenStreetMap — with caching"
+  },
+  {
+   "phase": "5. Process",
+   "notebook_sections": "3",
+   "what": "Clouds, gas flares, outliers, harmonisation, quality control"
+  },
+  {
+   "phase": "6. Analyse",
+   "notebook_sections": "4–12",
+   "what": "Eight use cases, validation, uncertainty, interpretation"
+  },
+  {
+   "phase": "7. Disseminate",
+   "notebook_sections": "15–18",
+   "what": "Dashboard, images, AI agent, GitHub repository"
+  },
+  {
+   "phase": "8. Evaluate",
+   "notebook_sections": "13–14",
+   "what": "Quality sheets, confidence levels, limitations, recommendations"
+  }
+ ],
+ "fair": [
+  {
+   "principle": "Findable",
+   "how": "Public GitHub repository with description, topics and CITATION.cff; metadata manifest; persistent identifier possible (Zenodo DOI)."
+  },
+  {
+   "principle": "Accessible",
+   "how": "Public HTTPS without authentication; open formats; code and data under an explicit licence."
+  },
+  {
+   "principle": "Interoperable",
+   "how": "CSV, JSON, GeoJSON (WGS 84); ISO 3166 codes; stable unit identifiers; documented indicator vocabulary."
+  },
+  {
+   "principle": "Reusable",
+   "how": "Provenance (sources, versions, parameters), licences, methods and limitations published with the results."
+  }
+ ],
+ "un_principles": [
+  {
+   "principle": "Relevance and impartiality",
+   "how": "Indicators useful to decision-makers, released to everyone at the same time."
+  },
+  {
+   "principle": "Professional standards",
+   "how": "Published scientific methods, choices based on technical criteria."
+  },
+  {
+   "principle": "Accountability and transparency",
+   "how": "Sources, methods and procedures documented."
+  },
+  {
+   "principle": "Prevention of misuse",
+   "how": "Confidence levels, limitations and an “experimental” label on every output."
+  },
+  {
+   "principle": "Cost-effectiveness",
+   "how": "Free satellite data, reproducible pipeline."
+  },
+  {
+   "principle": "Confidentiality",
+   "how": "No individual data: territorial aggregates only."
+  },
+  {
+   "principle": "International standards",
+   "how": "DQAF, GSBPM, FAIR, ISO 3166."
+  },
+  {
+   "principle": "Cooperation",
+   "how": "Open code, reusable by every statistical office."
+  }
+ ],
+ "experimental": [
+  "All series and maps derived from night-time lights",
+  "Estimated regional GDP and growth estimate for the unpublished year",
+  "Population “in the dark” (proxy of electricity access)",
+  "Industrial clusters and tourist season index"
+ ],
+ "references": [
+  "United Nations (2014). Fundamental Principles of Official Statistics. A/RES/68/261.",
+  "Data Quality Assessment Framework (DQAF, 2012) — generic framework.",
+  "UNECE (2019). Generic Statistical Business Process Model, GSBPM v5.1.",
+  "Wilkinson, M. D. et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. Scientific Data 3.",
+  "Eurostat (2021). Experimental statistics — European Statistical System guidelines."
+ ]
+}

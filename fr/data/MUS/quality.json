@@ -1,0 +1,330 @@
+{
+ "version": "2.1.0",
+ "generated": "2026-10-29T12:21:46",
+ "country": "Maurice",
+ "period": [
+  2014,
+  2025
+ ],
+ "lang": "fr",
+ "statement": "Les indicateurs issus des lumières nocturnes sont des statistiques expérimentales : ils complètent les statistiques officielles sans les remplacer. Chaque résultat est publié avec sa méthode, sa validation, son incertitude, ses limites et un niveau de confiance.",
+ "use_cases": [
+  {
+   "uc": 1,
+   "page": "time",
+   "title": "Dynamiques temporelles",
+   "question": "L'activité accélère-t-elle ou ralentit-elle, hors effet de saison ?",
+   "sources": [
+    "VIIRS VCMSLCFG (monthly)",
+    "VIIRS VNL V2 (annual)",
+    "Harmonised DMSP–VIIRS (Li et al., 2020)"
+   ],
+   "method": "STL robuste (période 12) sur log(somme des lumières) ; pente de Theil–Sen et test de Mann–Kendall sur les composites annuels ; détection d'anomalies et de ruptures.",
+   "validation": {
+    "text": "Significativité de la tendance (Mann–Kendall) et cohérence mensuel/annuel",
+    "metric": "p-value",
+    "value": "< 0,0001"
+   },
+   "uncertainty": "IC 95 % de la croissance annuelle : +4,7 % à +7,9 %",
+   "limits": "Couverture nuageuse et nuits courtes en été ; la lumière n'est pas la valeur ajoutée.",
+   "status": "experimental",
+   "confidence": "élevée",
+   "confidence_reason": "tendance significative (p < 0,01 ; n = 12)"
+  },
+  {
+   "uc": 2,
+   "page": "regions",
+   "title": "Croissance régionale et convergence",
+   "question": "Quelles régions décollent, lesquelles décrochent ?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL / WorldPop",
+    "Sentinel-5P NO₂"
+   ],
+   "method": "Croissance robuste par unité (Theil–Sen, Mann–Kendall), classes croissance/stagnation/déclin, β- et σ-convergence, indice de Herfindahl.",
+   "validation": {
+    "text": "Corrélation de rang avec le NO₂ troposphérique (source indépendante)",
+    "metric": "Spearman ρ",
+    "value": "0,66"
+   },
+   "uncertainty": "Classe attribuée seulement si |pente| ≥ seuil et p < α ; IC de β (erreurs robustes).",
+   "limits": "Petites unités : bruit et débordement de lumière (blooming) entre voisins.",
+   "status": "experimental",
+   "confidence": "moyenne",
+   "confidence_reason": "classement sur 12 unités, seuil ±1 %/an et p < 0,10"
+  },
+  {
+   "uc": 3,
+   "page": "time",
+   "title": "Relation lumières–PIB",
+   "question": "Peut-on estimer la croissance avant sa publication, et le PIB régional ?",
+   "sources": [
+    "VIIRS",
+    "PIB réel (Banque mondiale, WDI)"
+   ],
+   "method": "log(lumière) ~ log(PIB) en niveaux et en croissance, MCO avec écarts-types HAC ; prévision hors échantillon ; PIB régional = PIB national réparti au prorata de la lumière.",
+   "validation": {
+    "text": "Suivi hors échantillon de la croissance officielle",
+    "metric": "corrélation / EAM (points)",
+    "value": "-0,16 / 4,0"
+   },
+   "uncertainty": "IC 95 % de l'élasticité : 1,24 à 3,18 ; intervalles de prévision 80 % et 95 %.",
+   "limits": "Échantillon annuel court ; le PIB régional est une statistique expérimentale à confronter aux comptes régionaux.",
+   "status": "experimental",
+   "confidence": "moyenne",
+   "confidence_reason": "n = 12, significatif mais IC large (1,94)"
+  },
+  {
+   "uc": 4,
+   "page": "shocks",
+   "title": "Chocs et résilience",
+   "question": "Quelle a été la profondeur d'un choc, et la vitesse de récupération ?",
+   "sources": [
+    "VIIRS (monthly)",
+    "Black Marble VNP46A2 (daily)",
+    "catalogue d'événements"
+   ],
+   "method": "Écart au niveau d'avant-choc sur la série désaisonnalisée ; ruptures structurelles ; indice quotidien Black Marble.",
+   "validation": {
+    "text": "Le creux dépasse-t-il la variabilité ordinaire ?",
+    "metric": "creux (choc principal)",
+    "value": "-1,7 % — non"
+   },
+   "uncertainty": "Variabilité mensuelle d'avant-choc (écart-type robuste) ; ruptures inexpliquées signalées.",
+   "limits": "Les chocs touchant des activités peu éclairées (agriculture, services de jour) sont sous-estimés.",
+   "status": "experimental",
+   "confidence": "faible",
+   "confidence_reason": "creux comparé à la variabilité mensuelle d'avant-choc"
+  },
+  {
+   "uc": 5,
+   "page": "inequality",
+   "title": "Inégalités et électrification",
+   "question": "Où vivent les populations privées d'électricité ?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL / WorldPop",
+    "GHSL SMOD",
+    "accès à l'électricité (WDI)"
+   ],
+   "method": "Gini et Theil pondérés par la population ; population des pixels habités sous le seuil de détection ; sensibilité à trois seuils ; IC bootstrap de la variation du Gini.",
+   "validation": {
+    "text": "Écart avec le taux d'accès à l'électricité de la Banque mondiale",
+    "metric": "écart moyen (points)",
+    "value": "-6,4"
+   },
+   "uncertainty": "Plage selon le seuil de radiance ; IC bootstrap du Gini.",
+   "limits": "Proxy de l'éclairage extérieur, pas du raccordement : un foyer raccordé mais peu éclairé paraît « dans le noir ».",
+   "status": "experimental",
+   "confidence": "moyenne",
+   "confidence_reason": "sensible au seuil de radiance (de 0,00 à 0,00 M selon le seuil) ; proxy d'éclairage extérieur, pas de raccordement"
+  },
+  {
+   "uc": 6,
+   "page": "industry",
+   "title": "Zones industrielles",
+   "question": "Où est l'industrie, et son activité progresse-t-elle ?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL BUILT-S",
+    "Sentinel-5P NO₂/SO₂",
+    "MODIS MOD11A2",
+    "OpenStreetMap"
+   ],
+   "method": "Concordance de six signaux par pixel (≥ 3 dont la lumière), grappes 8-connexes, typologie et confiance.",
+   "validation": {
+    "text": "Comparaison avec la liste de référence (n.d.)",
+    "metric": "précision / rappel / F1",
+    "value": "non disponible"
+   },
+   "uncertainty": "Confiance par grappe selon le nombre de signaux forts ; sites isolés à vérifier.",
+   "limits": "Résolution de Sentinel-5P (≈ 5 km) et MODIS (1 km) : les signaux qualifient un voisinage.",
+   "status": "experimental",
+   "confidence": "faible",
+   "confidence_reason": "aucune liste de référence pour valider la détection"
+  },
+  {
+   "uc": 7,
+   "page": "tourism",
+   "title": "Tourisme saisonnier",
+   "question": "Quelles zones vivent du tourisme, et comment évolue la saison ?",
+   "sources": [
+    "VIIRS (monthly)",
+    "nuitées ou arrivées WDI"
+   ],
+   "method": "Surcroît estival net des unités comparables de même latitude ; test unilatéral ; indice de saison base 100 ; saisons recoupant le Ramadan signalées.",
+   "validation": {
+    "text": "Corrélation avec les nuitées",
+    "metric": "r",
+    "value": "non disponible"
+   },
+   "uncertainty": "p-valeur par unité ; années 2020–2021 exclues du classement.",
+   "limits": "Toute activité estivale (diaspora, résidences secondaires, festivals) est captée, pas seulement le tourisme.",
+   "status": "experimental",
+   "confidence": "faible",
+   "confidence_reason": "aucune statistique de nuitées pour valider l'indicateur"
+  },
+  {
+   "uc": 8,
+   "page": "urban",
+   "title": "Signaux d'urbanisation",
+   "question": "Où les villes s'étendent-elles, où les villages s'électrifient-ils, et où la population croît-elle sans lumière ?",
+   "sources": [
+    "VIIRS VNL V2",
+    "GHSL GHS-POP / WorldPop",
+    "GHSL GHS-BUILT-S R2023A",
+    "population urbaine (WDI)"
+   ],
+   "method": "Surface éclairée (pixels au-dessus du seuil) et population par unité ; croissances de Theil–Sen ; pixels nouvellement éclairés (sombres deux années de suite au début, éclairés deux années de suite à la fin), séparés entre électrification de zones habitées et nouvelles implantations ; typologie lumière/population.",
+   "validation": {
+    "text": "Corrélation de rang avec la croissance de la surface bâtie GHSL (source indépendante)",
+    "metric": "Spearman ρ",
+    "value": "0,39"
+   },
+   "uncertainty": "Persistance exigée sur deux années pour limiter le bruit ; marge de ± 1 point entre croissances avant de classer.",
+   "limits": "La lumière mesure l'éclairage extérieur, pas l'urbanisation au sens administratif ; le débordement (blooming) élargit les villes ; la population GHSL est interpolée entre époques.",
+   "status": "experimental",
+   "confidence": "faible",
+   "confidence_reason": "corrélation de rang de 0,39 avec la croissance du bâti GHSL (11 unités)"
+  }
+ ],
+ "dqaf": [
+  {
+   "dimension": "0. Conditions préalables",
+   "practice": "Cadre institutionnel, ressources, pertinence",
+   "evidence": "Projet Banque africaine de développement × Data Innovation for Africa (DI4A) ; données satellitaires gratuites ; questions de politique publique explicites pour chaque cas d'usage."
+  },
+  {
+   "dimension": "1. Garanties d'intégrité",
+   "practice": "Professionnalisme, transparence, normes éthiques",
+   "evidence": "Code ouvert, méthodes documentées, paramètres et versions consignés dans le manifeste ; aucune donnée individuelle ; publication sans intervention manuelle sur les chiffres."
+  },
+  {
+   "dimension": "2. Rigueur méthodologique",
+   "practice": "Concepts, champ, classifications, base d'enregistrement",
+   "evidence": "Méthodes publiées dans la littérature (Henderson et al. 2012 ; Elvidge et al. 2021 ; Román et al. 2018) ; codes ISO 3166 ; limites geoBoundaries ; WGS 84."
+  },
+  {
+   "dimension": "3. Exactitude et fiabilité",
+   "practice": "Sources, évaluation, techniques statistiques, validation, révisions",
+   "evidence": "Contrôle qualité (couverture nuageuse, torchères, aberrants) ; validation de chaque cas d'usage contre une source indépendante ; intervalles de confiance ; niveau de confiance publié."
+  },
+  {
+   "dimension": "4. Utilité",
+   "practice": "Périodicité, actualité, cohérence, politique de révision",
+   "evidence": "Séries mensuelles disponibles quelques semaines après le mois ; recalcul complet à chaque exécution (cache horodaté) ; cohérence vérifiée entre séries mensuelles et annuelles."
+  },
+  {
+   "dimension": "5. Accessibilité",
+   "practice": "Données, métadonnées, assistance",
+   "evidence": "Tableau de bord public bilingue, fichiers ouverts (CSV, JSON, GeoJSON), manifeste de métadonnées, agent IA citant ses sources, dépôt GitHub avec citation."
+  }
+ ],
+ "gsbpm": [
+  {
+   "phase": "1. Spécifier les besoins",
+   "notebook_sections": "1",
+   "what": "Questions de politique publique des huit cas d'usage"
+  },
+  {
+   "phase": "2. Concevoir",
+   "notebook_sections": "1–2",
+   "what": "Choix des sources, des indicateurs et des seuils"
+  },
+  {
+   "phase": "3. Construire",
+   "notebook_sections": "2",
+   "what": "Pipeline paramétré par ISO3, code embarqué, tests sur jeu synthétique"
+  },
+  {
+   "phase": "4. Collecter",
+   "notebook_sections": "3",
+   "what": "Earth Engine, Banque mondiale, OpenStreetMap — avec cache"
+  },
+  {
+   "phase": "5. Traiter",
+   "notebook_sections": "3",
+   "what": "Nuages, torchères, aberrants, harmonisation, contrôle qualité"
+  },
+  {
+   "phase": "6. Analyser",
+   "notebook_sections": "4–12",
+   "what": "Huit cas d'usage, validation, incertitude, interprétation"
+  },
+  {
+   "phase": "7. Diffuser",
+   "notebook_sections": "15–18",
+   "what": "Tableau de bord, images, agent IA, dépôt GitHub"
+  },
+  {
+   "phase": "8. Évaluer",
+   "notebook_sections": "13–14",
+   "what": "Fiches qualité, niveaux de confiance, limites, recommandations"
+  }
+ ],
+ "fair": [
+  {
+   "principle": "Trouvable (Findable)",
+   "how": "Dépôt GitHub public avec description, mots-clés et CITATION.cff ; manifeste de métadonnées ; identifiant pérenne possible (DOI Zenodo)."
+  },
+  {
+   "principle": "Accessible",
+   "how": "HTTPS public sans authentification ; formats ouverts ; code et données sous licence explicite."
+  },
+  {
+   "principle": "Interopérable (Interoperable)",
+   "how": "CSV, JSON, GeoJSON (WGS 84) ; codes ISO 3166 ; identifiants d'unités stables ; vocabulaire des indicateurs documenté."
+  },
+  {
+   "principle": "Réutilisable (Reusable)",
+   "how": "Provenance (sources, versions, paramètres), licences, méthodes et limites publiées avec les résultats."
+  }
+ ],
+ "un_principles": [
+  {
+   "principle": "Pertinence et impartialité",
+   "how": "Indicateurs utiles aux décideurs, diffusés à tous en même temps."
+  },
+  {
+   "principle": "Normes professionnelles",
+   "how": "Méthodes scientifiques publiées, choix fondés sur des critères techniques."
+  },
+  {
+   "principle": "Responsabilité et transparence",
+   "how": "Sources, méthodes et procédures documentées."
+  },
+  {
+   "principle": "Prévention des mauvais usages",
+   "how": "Niveaux de confiance, limites et étiquette « expérimental » sur chaque résultat."
+  },
+  {
+   "principle": "Efficacité",
+   "how": "Données satellitaires gratuites, pipeline reproductible."
+  },
+  {
+   "principle": "Confidentialité",
+   "how": "Aucune donnée individuelle : agrégats territoriaux uniquement."
+  },
+  {
+   "principle": "Normes internationales",
+   "how": "DQAF, GSBPM, FAIR, ISO 3166."
+  },
+  {
+   "principle": "Coopération",
+   "how": "Code ouvert, réutilisable par tous les instituts statistiques."
+  }
+ ],
+ "experimental": [
+  "Toutes les séries et cartes dérivées des lumières nocturnes",
+  "PIB régional estimé et estimation de croissance de l'année non publiée",
+  "Population « dans le noir » (proxy de l'accès à l'électricité)",
+  "Grappes industrielles et indice de saison touristique"
+ ],
+ "references": [
+  "United Nations (2014). Fundamental Principles of Official Statistics. A/RES/68/261.",
+  "Data Quality Assessment Framework (DQAF, 2012) — generic framework.",
+  "UNECE (2019). Generic Statistical Business Process Model, GSBPM v5.1.",
+  "Wilkinson, M. D. et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. Scientific Data 3.",
+  "Eurostat (2021). Experimental statistics — European Statistical System guidelines."
+ ]
+}
